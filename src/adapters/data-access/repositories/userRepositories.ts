@@ -38,6 +38,20 @@ export async function storeOtp(generatedOtp: string, email: string) {
           },
         }
       );
+      
+      // Schedule deletion after 5 minutes
+      setTimeout(async () => {
+        await userModel.updateOne(
+          { email },
+          {
+            $unset: {
+              otp: "",
+              otpCreatedAt: "",
+            },
+          }
+        );
+        console.log("otp and createdAt fields deleted after 5 minutes.");
+      }, 5 * 60 * 1000); // 5 minutes in milliseconds
       console.log("otp stored..");
     } else {
       console.log("User not found.");

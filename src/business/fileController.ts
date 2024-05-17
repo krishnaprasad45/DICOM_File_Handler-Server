@@ -9,6 +9,7 @@ const upload = multer({ dest: "uploads/" }); // Configure upload directory
 
 export const uploadFile = (req: Request, res: Response) => {
   try {
+    console.log(1)
     const currentFile = req.file;
     if (currentFile) {
       const dicomBuffer = currentFile.buffer;
@@ -43,7 +44,7 @@ export const uploadFile = (req: Request, res: Response) => {
       const acquisitionTechnique = dataSet.string("x00180038") || "--";
       const imgProcedure = dataSet.string("x00321060") || "--";
 
-    
+    console.log(patientName)
 
       // const elements = dataSet.elements;
       // Iterate over each element

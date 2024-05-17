@@ -102,6 +102,7 @@ exports.saveUser = saveUser;
 function storeOtp(generatedOtp, email) {
     return __awaiter(this, void 0, void 0, function () {
         var user, error_3;
+        var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -118,6 +119,23 @@ function storeOtp(generatedOtp, email) {
                         })];
                 case 2:
                     _a.sent();
+                    // Schedule deletion after 5 minutes
+                    setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, userModel_1.default.updateOne({ email: email }, {
+                                        $unset: {
+                                            otp: "",
+                                            otpCreatedAt: "",
+                                        },
+                                    })];
+                                case 1:
+                                    _a.sent();
+                                    console.log("otp and createdAt fields deleted after 5 minutes.");
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }, 5 * 60 * 1000); // 5 minutes in milliseconds
                     console.log("otp stored..");
                     return [3 /*break*/, 4];
                 case 3:

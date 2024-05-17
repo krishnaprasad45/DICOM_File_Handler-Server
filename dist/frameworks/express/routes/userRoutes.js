@@ -11,7 +11,7 @@ var verifyEmailWithOtp_1 = require("../../../business/usecases/userUsecases/veri
 var userRoute = express_1.default.Router();
 var upload = (0, multer_1.default)();
 userRoute.post("/signup", userController_1.userSignup);
+userRoute.post("/login", userController_1.userLogin);
 userRoute.post("/otp", verifyEmailWithOtp_1.verifyEmailWithOtp);
 userRoute.post('/uploadfile', upload.single('file'), fileController_1.uploadFile);
-// userRoute.get("/login", userLogin);
 exports.default = userRoute;

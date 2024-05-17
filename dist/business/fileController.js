@@ -11,6 +11,7 @@ var removeCarat_1 = __importDefault(require("../frameworks/Utilities/helperFunct
 var upload = (0, multer_1.default)({ dest: "uploads/" }); // Configure upload directory
 var uploadFile = function (req, res) {
     try {
+        console.log(1);
         var currentFile = req.file;
         if (currentFile) {
             var dicomBuffer = currentFile.buffer;
@@ -42,6 +43,7 @@ var uploadFile = function (req, res) {
             var bodyPart = dataSet.string("x00180015") || "--";
             var acquisitionTechnique = dataSet.string("x00180038") || "--";
             var imgProcedure = dataSet.string("x00321060") || "--";
+            console.log(patientName);
             // const elements = dataSet.elements;
             // Iterate over each element
             // for (const tag in elements) {
