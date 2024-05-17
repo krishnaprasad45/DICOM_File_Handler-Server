@@ -4,19 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var body_parser_1 = __importDefault(require("body-parser"));
 var cors_1 = __importDefault(require("cors"));
 var dotenv_1 = __importDefault(require("dotenv"));
 var mongo_1 = __importDefault(require("../frameworks/database/mongo"));
-var fileController_1 = require("../business/fileController");
-var multer_1 = __importDefault(require("multer"));
-var upload = (0, multer_1.default)();
+var userRoutes_1 = __importDefault(require("../frameworks/express/routes/userRoutes"));
+var loggingMiddleware_1 = __importDefault(require("../frameworks/express/middleware/loggingMiddleware"));
+// Load environment variables early
+dotenv_1.default.config();
 var app = (0, express_1.default)();
 var PORT = process.env.PORT;
 var HOST = process.env.HOST;
 // Middleware
-app.use(body_parser_1.default.json());
-app.use((0, cors_1.default)());
+app.use(express_1.default.json()); // Parse JSON bodies
+// Use the logging middleware
+app.use(loggingMiddleware_1.default);
 var allowedOrigins = [HOST]; // Protected, Only allowed for HOST
 app.use((0, cors_1.default)({
     origin: function (origin, callback) {
@@ -31,10 +32,8 @@ app.use((0, cors_1.default)({
 }));
 // Connect to Database
 (0, mongo_1.default)();
-// Load environment variables
-dotenv_1.default.config();
 // Routes
-app.post('/uploadfile', upload.single('file'), fileController_1.uploadFile);
+app.use("/", userRoutes_1.default);
 // Start the server
 app.listen(PORT, function () {
     console.log("Server is running on port ".concat(PORT));

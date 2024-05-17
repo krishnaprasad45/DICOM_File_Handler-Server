@@ -39,31 +39,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var mongoUrl = process.env.MONGO_URL;
-// const mongoUrl ='mongodb+srv://superadmin:admin123@cluster0.wb9j1wz.mongodb.net/DICOMDATABASE?retryWrites=true&w=majority&appName=Cluster0'
-var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                if (!mongoUrl) return [3 /*break*/, 2];
-                return [4 /*yield*/, mongoose_1.default.connect(mongoUrl)];
-            case 1:
-                _a.sent();
-                _a.label = 2;
-            case 2:
-                console.log("database connected");
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                console.error('Error connecting to MongoDB:', error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
+exports.matchPassword = exports.securePassword = void 0;
+var bcrypt_1 = __importDefault(require("bcrypt"));
+function securePassword(password) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log("secure password..");
+                    if (!password) return [3 /*break*/, 2];
+                    return [4 /*yield*/, bcrypt_1.default.hash(password, 10)];
+                case 1: return [2 /*return*/, _a.sent()];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
-}); };
-exports.default = connectDB;
+}
+exports.securePassword = securePassword;
+function matchPassword(passwordOne, passwordTwo) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, bcrypt_1.default.compare(passwordOne, passwordTwo)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.matchPassword = matchPassword;
+module.exports = { securePassword: securePassword, matchPassword: matchPassword };

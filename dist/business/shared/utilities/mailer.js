@@ -39,31 +39,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
+/* eslint-disable no-mixed-spaces-and-tabs */
+var nodemailer_1 = __importDefault(require("nodemailer"));
 var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-var mongoUrl = process.env.MONGO_URL;
-// const mongoUrl ='mongodb+srv://superadmin:admin123@cluster0.wb9j1wz.mongodb.net/DICOMDATABASE?retryWrites=true&w=majority&appName=Cluster0'
-var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+var _a = process.env, NODEMAILER_EMAIL = _a.NODEMAILER_EMAIL, NODEMAILER_PASS = _a.NODEMAILER_PASS;
+var sendOTPByEmail = function (email, otp) { return __awaiter(void 0, void 0, void 0, function () {
+    var mailTransporter, msg, mailDetails, send, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
-                if (!mongoUrl) return [3 /*break*/, 2];
-                return [4 /*yield*/, mongoose_1.default.connect(mongoUrl)];
+                _a.trys.push([0, 2, , 3]);
+                mailTransporter = nodemailer_1.default.createTransport({
+                    service: "gmail",
+                    auth: {
+                        user: NODEMAILER_EMAIL,
+                        pass: NODEMAILER_PASS,
+                    },
+                });
+                msg = "Dear user  OTP to reset your  login  is  ".concat(otp, ".Do not share this to any one");
+                mailDetails = {
+                    from: NODEMAILER_EMAIL,
+                    to: email,
+                    subject: "OTP-Verification",
+                    text: msg,
+                };
+                return [4 /*yield*/, mailTransporter.sendMail(mailDetails)];
             case 1:
-                _a.sent();
-                _a.label = 2;
+                send = _a.sent();
+                if (send)
+                    console.log("Otp send successfully");
+                else
+                    console.log("Error in sending otp");
+                return [3 /*break*/, 3];
             case 2:
-                console.log("database connected");
-                return [3 /*break*/, 4];
-            case 3:
                 error_1 = _a.sent();
-                console.error('Error connecting to MongoDB:', error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                console.log(error_1, "Error in sendig otp");
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.default = connectDB;
+exports.default = sendOTPByEmail;

@@ -39,31 +39,78 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var mongoUrl = process.env.MONGO_URL;
-// const mongoUrl ='mongodb+srv://superadmin:admin123@cluster0.wb9j1wz.mongodb.net/DICOMDATABASE?retryWrites=true&w=majority&appName=Cluster0'
-var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                if (!mongoUrl) return [3 /*break*/, 2];
-                return [4 /*yield*/, mongoose_1.default.connect(mongoUrl)];
-            case 1:
-                _a.sent();
-                _a.label = 2;
-            case 2:
-                console.log("database connected");
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                console.error('Error connecting to MongoDB:', error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+var bcrypt_1 = __importDefault(require("bcrypt"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.default = {
+    hashPassword: function (password) { return __awaiter(void 0, void 0, void 0, function () {
+        var error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, bcrypt_1.default.hash(password, 10)];
+                case 1: return [2 /*return*/, _a.sent()];
+                case 2:
+                    error_1 = _a.sent();
+                    throw new Error(error_1.message);
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); },
+    comparePassword: function (passwordOne, passwordTwo) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, bcrypt_1.default.compare(passwordOne, passwordTwo)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    }); },
+    createToken: function (data, role, expireIn) {
+        try {
+            var secretKey = process.env.JWT_SECRETKEY;
+            var payload = {
+                data: data,
+                role: role,
+            };
+            var options = {
+                expiresIn: expireIn,
+            };
+            if (secretKey) {
+                var token = jsonwebtoken_1.default.sign(payload, secretKey, options);
+                return token;
+            }
+            else {
+                throw new Error("Unable to create Token please try agian later");
+            }
         }
-    });
-}); };
-exports.default = connectDB;
+        catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    encryptData: function (data, expireIn) {
+        try {
+            var secretKey = process.env.JWT_SECRETKEY || "";
+            var payload = {
+                payload: data,
+            };
+            var options = {
+                expiresIn: expireIn,
+            };
+            var token = jsonwebtoken_1.default.sign(payload, secretKey, options);
+            return token;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    decryptdata: function (data) {
+        try {
+            var secretKey = process.env.JWT_SECRETKEY || "";
+            var decodedToken = jsonwebtoken_1.default.verify(data, secretKey);
+            return decodedToken;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    }
+};

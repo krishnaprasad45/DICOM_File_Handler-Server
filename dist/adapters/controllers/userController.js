@@ -35,35 +35,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var mongoUrl = process.env.MONGO_URL;
-// const mongoUrl ='mongodb+srv://superadmin:admin123@cluster0.wb9j1wz.mongodb.net/DICOMDATABASE?retryWrites=true&w=majority&appName=Cluster0'
-var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+exports.userSignup = void 0;
+var createUser_1 = require("../../business/usecases/userUsecases/createUser");
+var sentEmailWithOtp_1 = require("../../business/usecases/userUsecases/sentEmailWithOtp");
+var userSignup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, userData, verification, error_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
-                if (!mongoUrl) return [3 /*break*/, 2];
-                return [4 /*yield*/, mongoose_1.default.connect(mongoUrl)];
+                _b.trys.push([0, 3, , 4]);
+                _a = req.body, email = _a.email, password = _a.password;
+                return [4 /*yield*/, (0, createUser_1.createUser)({
+                        email: email,
+                        password: password,
+                    })];
             case 1:
-                _a.sent();
-                _a.label = 2;
+                userData = _b.sent();
+                return [4 /*yield*/, (0, sentEmailWithOtp_1.sentEmailWithOtp)(email)];
             case 2:
-                console.log("database connected");
+                verification = _b.sent();
+                console.log(7, verification);
+                res.status(201).json(userData);
                 return [3 /*break*/, 4];
             case 3:
-                error_1 = _a.sent();
-                console.error('Error connecting to MongoDB:', error_1);
+                error_1 = _b.sent();
+                console.error(error_1);
+                res.json({ message: error_1 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
-exports.default = connectDB;
+exports.userSignup = userSignup;

@@ -35,35 +35,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var mongoUrl = process.env.MONGO_URL;
-// const mongoUrl ='mongodb+srv://superadmin:admin123@cluster0.wb9j1wz.mongodb.net/DICOMDATABASE?retryWrites=true&w=majority&appName=Cluster0'
-var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                if (!mongoUrl) return [3 /*break*/, 2];
-                return [4 /*yield*/, mongoose_1.default.connect(mongoUrl)];
-            case 1:
-                _a.sent();
-                _a.label = 2;
-            case 2:
-                console.log("database connected");
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                console.error('Error connecting to MongoDB:', error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
+exports.verifyEmailWithOtp = void 0;
+var userRepositories_1 = require("../../../adapters/data-access/repositories/userRepositories");
+function verifyEmailWithOtp(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, email, enteredOtp, retrievedOtp, user, error_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 8, , 9]);
+                    console.log("verifyEmailWithOtp");
+                    _a = req.body, email = _a.email, enteredOtp = _a.enteredOtp;
+                    return [4 /*yield*/, (0, userRepositories_1.getOtp)(email)];
+                case 1:
+                    retrievedOtp = _b.sent();
+                    if (!(retrievedOtp === enteredOtp)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, (0, userRepositories_1.findUserByEmail)(email)];
+                case 2:
+                    user = _b.sent();
+                    if (!user) return [3 /*break*/, 4];
+                    user.emailVerification = true;
+                    return [4 /*yield*/, user.save()];
+                case 3:
+                    _b.sent();
+                    res.status(200).json({ message: "Email verified successfully." });
+                    return [3 /*break*/, 5];
+                case 4:
+                    res.status(404).json({ message: "User not found." });
+                    _b.label = 5;
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    res.status(400).json({ message: "Invalid OTP." });
+                    _b.label = 7;
+                case 7: return [3 /*break*/, 9];
+                case 8:
+                    error_1 = _b.sent();
+                    console.error("Error verifying email with OTP:", error_1);
+                    res.status(500).json({ message: "Internal server error." });
+                    return [3 /*break*/, 9];
+                case 9: return [2 /*return*/];
+            }
+        });
     });
-}); };
-exports.default = connectDB;
+}
+exports.verifyEmailWithOtp = verifyEmailWithOtp;

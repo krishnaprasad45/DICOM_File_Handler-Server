@@ -39,31 +39,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var mongoUrl = process.env.MONGO_URL;
-// const mongoUrl ='mongodb+srv://superadmin:admin123@cluster0.wb9j1wz.mongodb.net/DICOMDATABASE?retryWrites=true&w=majority&appName=Cluster0'
-var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                if (!mongoUrl) return [3 /*break*/, 2];
-                return [4 /*yield*/, mongoose_1.default.connect(mongoUrl)];
-            case 1:
-                _a.sent();
-                _a.label = 2;
-            case 2:
-                console.log("database connected");
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                console.error('Error connecting to MongoDB:', error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
+exports.sentEmailWithOtp = void 0;
+var userRepositories_1 = require("../../../adapters/data-access/repositories/userRepositories");
+var generateOtp_1 = __importDefault(require("../../shared/utilities/generateOtp"));
+var mailer_1 = __importDefault(require("../../shared/utilities/mailer"));
+function sentEmailWithOtp(email) {
+    return __awaiter(this, void 0, void 0, function () {
+        var existingUser, generatedOtp, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 6, , 7]);
+                    return [4 /*yield*/, (0, userRepositories_1.findUserByEmail)(email)];
+                case 1:
+                    existingUser = _a.sent();
+                    if (!existingUser) return [3 /*break*/, 4];
+                    generatedOtp = (0, generateOtp_1.default)();
+                    console.log("otp..", generatedOtp);
+                    return [4 /*yield*/, (0, userRepositories_1.storeOtp)(generatedOtp, email)];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, (0, mailer_1.default)(email, generatedOtp)];
+                case 3:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 4: throw new Error("Email does not exist in the database");
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    error_1 = _a.sent();
+                    console.error("Error sending email with OTP:", error_1);
+                    throw error_1;
+                case 7: return [2 /*return*/];
+            }
+        });
     });
-}); };
-exports.default = connectDB;
+}
+exports.sentEmailWithOtp = sentEmailWithOtp;

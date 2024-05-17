@@ -1,19 +1,22 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from '../frameworks/database/mongo';
-import { uploadFile } from '../business/fileController';
-import multer from 'multer';
-const upload = multer();
+import userRoute from '../frameworks/express/routes/userRoutes';
+import loggingMiddleware from '../frameworks/express/middleware/loggingMiddleware';
+
+// Load environment variables early
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT ;
-const HOST = process.env.HOST ;    
+const PORT = process.env.PORT;
+const HOST = process.env.HOST;
 
 // Middleware
-app.use(bodyParser.json());
-app.use(cors());
+app.use(express.json()); // Parse JSON bodies
+// Use the logging middleware
+app.use(loggingMiddleware);
+
 const allowedOrigins = [HOST]; // Protected, Only allowed for HOST
 app.use(
   cors({
@@ -27,17 +30,14 @@ app.use(
     credentials: true,
   })
 );
+
 // Connect to Database
 connectDB();
 
-// Load environment variables
-dotenv.config();
-
 // Routes
-app.post('/uploadfile', upload.single('file'), uploadFile);
+app.use("/", userRoute);
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
-

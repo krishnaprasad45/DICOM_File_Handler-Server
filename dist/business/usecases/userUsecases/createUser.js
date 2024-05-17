@@ -35,35 +35,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var mongoUrl = process.env.MONGO_URL;
-// const mongoUrl ='mongodb+srv://superadmin:admin123@cluster0.wb9j1wz.mongodb.net/DICOMDATABASE?retryWrites=true&w=majority&appName=Cluster0'
-var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                if (!mongoUrl) return [3 /*break*/, 2];
-                return [4 /*yield*/, mongoose_1.default.connect(mongoUrl)];
-            case 1:
-                _a.sent();
-                _a.label = 2;
-            case 2:
-                console.log("database connected");
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                console.error('Error connecting to MongoDB:', error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
+exports.createUser = void 0;
+var userRepositories_1 = require("../../../adapters/data-access/repositories/userRepositories");
+var bcrypt_1 = require("../../../adapters/external-services/bcrypt");
+function createUser(_a) {
+    return __awaiter(this, arguments, void 0, function (_b) {
+        var existingUser, securedPassword, error_1;
+        var email = _b.email, password = _b.password;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 6, , 7]);
+                    console.log("create user");
+                    return [4 /*yield*/, (0, userRepositories_1.findUserByEmail)(email)];
+                case 1:
+                    existingUser = _c.sent();
+                    if (!(!existingUser && password)) return [3 /*break*/, 4];
+                    return [4 /*yield*/, (0, bcrypt_1.securePassword)(password)];
+                case 2:
+                    securedPassword = _c.sent();
+                    return [4 /*yield*/, (0, userRepositories_1.saveUser)({
+                            email: email,
+                            password: securedPassword,
+                        })];
+                case 3: return [2 /*return*/, _c.sent()];
+                case 4: throw new Error("Email already exists in the database");
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    error_1 = _c.sent();
+                    console.error("Error creating user:", error_1);
+                    throw error_1;
+                case 7: return [2 /*return*/];
+            }
+        });
     });
-}); };
-exports.default = connectDB;
+}
+exports.createUser = createUser;
