@@ -46,20 +46,21 @@ var formatedDate_1 = __importDefault(require("../frameworks/Utilities/helperFunc
 var removeCarat_1 = __importDefault(require("../frameworks/Utilities/helperFunction/removeCarat"));
 var documentRepository_1 = require("../adapters/data-access/repositories/documentRepository");
 var userRepositories_1 = require("../adapters/data-access/repositories/userRepositories");
+var createPDF_1 = require("../frameworks/Utilities/helperFunction/createPDF");
 var upload = (0, multer_1.default)({ dest: "uploads/" }); // Configure upload directory
 var uploadFile = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var currentFile, userEmail, userId, dicomBuffer, dataSet, patientName, formattedPatientName, patientID, patientDOB, formattedPatientDOB, patientGender, studyID, studyDescription, studyDate, formattedStudyDate, modality, pixelSpacing, imageType, docimType, instanceUID, accessionNumber, doctorName, physician, studyReason, studyInstitution, reviewedInstitution, institutionLocation, bodyPart, acquisitionTechnique, imgProcedure, documentData, error_1;
+    var currentFile, userEmail, userId, dicomBuffer, dataSet, patientName, formattedPatientName, patientID, patientDOB, formattedPatientDOB, patientGender, studyID, studyDescription, studyDate, formattedStudyDate, modality, pixelSpacing, imageType, docimType, instanceUID, accessionNumber, doctorName, physician, studyReason, studyInstitution, reviewedInstitution, institutionLocation, bodyPart, acquisitionTechnique, imgProcedure, documentData, pdfBytes, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, , 6]);
+                _a.trys.push([0, 6, , 7]);
                 currentFile = req.file;
                 userEmail = req.body.userEmail;
                 return [4 /*yield*/, (0, userRepositories_1.getUserIdByEmail)(userEmail)];
             case 1:
                 userId = _a.sent();
                 console.log("userId", userId);
-                if (!currentFile) return [3 /*break*/, 3];
+                if (!currentFile) return [3 /*break*/, 4];
                 dicomBuffer = currentFile.buffer;
                 dataSet = dicom_parser_1.default.parseDicom(dicomBuffer);
                 patientName = dataSet.string("x00100010") || "--";
@@ -115,17 +116,24 @@ var uploadFile = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, (0, documentRepository_1.saveMedicalDocument)(documentData)];
             case 2:
                 _a.sent();
-                return [3 /*break*/, 4];
+                return [4 /*yield*/, (0, createPDF_1.createPDF)(dataSet)];
             case 3:
+                pdfBytes = _a.sent();
+                console.log("PDF>>", pdfBytes);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', 'attachment; filename="report.pdf"');
+                res.send(Buffer.from(pdfBytes));
+                return [3 /*break*/, 5];
+            case 4:
                 console.error("No file uploaded"); // Log an error if no file is uploaded
-                _a.label = 4;
-            case 4: return [3 /*break*/, 6];
-            case 5:
+                _a.label = 5;
+            case 5: return [3 /*break*/, 7];
+            case 6:
                 error_1 = _a.sent();
                 console.error("Error uploading file:", error_1);
                 res.status(500).send("Error uploading file");
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); };

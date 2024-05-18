@@ -7,6 +7,7 @@ import removeCarat from "../frameworks/Utilities/helperFunction/removeCarat";
 import { saveMedicalDocument } from "../adapters/data-access/repositories/documentRepository";
 import MedicalDocumenInterface from './Interfaces/dicomInterface';
 import { getUserIdByEmail } from "../adapters/data-access/repositories/userRepositories";
+import { createPDF } from "../frameworks/Utilities/helperFunction/createPDF";
 
 const upload = multer({ dest: "uploads/" }); // Configure upload directory
 
@@ -74,11 +75,11 @@ export const uploadFile = async (req: Request, res: Response) => {
       };
 
       await saveMedicalDocument(documentData);
-      // const pdfBytes = createPDF(dataSet);
-      // console.log("PDF>>", pdfBytes)
-      // res.setHeader('Content-Type', 'application/pdf');
-      // res.setHeader('Content-Disposition', 'attachment; filename="report.pdf"');
-      // res.send(pdfBytes);
+      const pdfBytes = await createPDF(dataSet);
+      console.log("PDF>>", pdfBytes)
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="report.pdf"');
+      res.send(Buffer.from(pdfBytes));
 
     } else {
       console.error("No file uploaded"); // Log an error if no file is uploaded
