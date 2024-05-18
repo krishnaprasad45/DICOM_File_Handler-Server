@@ -29,6 +29,5 @@ The app uses JWT authentication for secure access to protected endpoints.
 First, when a user uploads a DICOM file, the application uses dicom-parser to read the file and extract important information like patient details, imaging parameters, and other metadata. This extracted metadata is then structured and stored in a database, using a Mongoose schema for MongoDB.
 The DICOM metadata stored in the database can then be accessed and retrieved whenever needed, allowing users to view or analyze the information associated with each DICOM file they've uploaded. professionals and researchers.
 
----
+![Thumbnail](https://drive.google.com/uc?export=view&id=1ATUjrt2762PaMdyxfLyz6zc1XfcNVztJ)
 
-[![Thumbnail](https://drive.google.com/file/d/1ATUjrt2762PaMdyxfLyz6zc1XfcNVztJ/view?usp=sharing)
