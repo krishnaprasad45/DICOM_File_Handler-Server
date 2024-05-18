@@ -46,7 +46,6 @@ function securePassword(password) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log("secure password..");
                     if (!password) return [3 /*break*/, 2];
                     return [4 /*yield*/, bcrypt_1.default.hash(password, 10)];
                 case 1: return [2 /*return*/, _a.sent()];

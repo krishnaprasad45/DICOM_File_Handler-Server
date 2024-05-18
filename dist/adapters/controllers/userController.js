@@ -56,7 +56,6 @@ var userSignup = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, (0, sentEmailWithOtp_1.sentEmailWithOtp)(email)];
             case 2:
                 verification = _b.sent();
-                console.log(7, verification);
                 res.status(201).json(userData);
                 return [3 /*break*/, 4];
             case 3:

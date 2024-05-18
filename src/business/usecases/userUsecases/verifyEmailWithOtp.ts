@@ -7,9 +7,7 @@ import {
 
 export async function verifyEmailWithOtp(req: Request, res: Response) {
     try {
-      console.log("verifyEmailWithOtp");
       const { email, enteredOtp } = req.body;
-  
       const retrievedOtp = await getOtp(email);
       if (retrievedOtp === enteredOtp) {
         const user = await findUserByEmail(email);

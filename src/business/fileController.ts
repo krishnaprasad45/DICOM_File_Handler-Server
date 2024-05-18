@@ -16,7 +16,6 @@ export const uploadFile = async (req: Request, res: Response) => {
     const currentFile = req.file;
     const userEmail = req.body.userEmail;
     const userId = await getUserIdByEmail(userEmail) 
-    console.log("userId", userId)
     if (currentFile) {
       const dicomBuffer = currentFile.buffer;
       // Parse the DICOM file
@@ -76,10 +75,9 @@ export const uploadFile = async (req: Request, res: Response) => {
 
       await saveMedicalDocument(documentData);
       const pdfBytes = await createPDF(dataSet);
-      console.log("PDF>>", pdfBytes)
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', 'attachment; filename="report.pdf"');
-      res.send(Buffer.from(pdfBytes));
+      res.send(Buffer.from(pdfBytes));  
 
     } else {
       console.error("No file uploaded"); // Log an error if no file is uploaded

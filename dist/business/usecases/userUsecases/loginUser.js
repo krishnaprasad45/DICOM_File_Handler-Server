@@ -48,15 +48,12 @@ function loginUser(email, password) {
                 case 0: return [4 /*yield*/, (0, userRepositories_1.findUserByEmail)(email)];
                 case 1:
                     existingUser = _a.sent();
-                    console.log("existing user data", existingUser);
                     if (!existingUser) return [3 /*break*/, 3];
                     return [4 /*yield*/, (0, bcrypt_1.matchPassword)(password, existingUser.password)];
                 case 2:
                     isMatch = _a.sent();
-                    console.log("ismatch", isMatch);
                     if (isMatch) {
                         token = (0, jwtTokenAuth_1.generateAuthToken)(existingUser);
-                        console.log(token, "token..");
                         return [2 /*return*/, { userData: existingUser, token: token }];
                     }
                     else {

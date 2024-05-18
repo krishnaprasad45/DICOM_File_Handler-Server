@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveMedicalDocument = void 0;
+exports.getRecordsFromDB = exports.saveMedicalDocument = void 0;
 var dicomModel_1 = __importDefault(require("../models/dicomModel"));
 var saveMedicalDocument = function (documentData) { return __awaiter(void 0, void 0, void 0, function () {
     var newMedicalDocument;
@@ -50,9 +50,22 @@ var saveMedicalDocument = function (documentData) { return __awaiter(void 0, voi
                 return [4 /*yield*/, newMedicalDocument.save()];
             case 1:
                 _a.sent();
-                console.log('Medical document saved successfully');
                 return [2 /*return*/];
         }
     });
 }); };
 exports.saveMedicalDocument = saveMedicalDocument;
+var getRecordsFromDB = function (userId) { return __awaiter(void 0, void 0, void 0, function () {
+    var userIdStr, records;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userIdStr = userId.toString();
+                return [4 /*yield*/, dicomModel_1.default.find({ userId: userIdStr })];
+            case 1:
+                records = _a.sent();
+                return [2 /*return*/, records ? records : null];
+        }
+    });
+}); };
+exports.getRecordsFromDB = getRecordsFromDB;

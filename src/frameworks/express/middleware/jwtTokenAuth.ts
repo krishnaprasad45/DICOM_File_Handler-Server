@@ -8,13 +8,9 @@ dotenv.config();
 
 
 export function generateAuthToken(existingUser: userInterface) {
-  console.log("generateAuthToken");
   const { email, password } = existingUser;
   const jwtSecretKey = process.env.JWT_SECRETKEY || ''; // Provide a default value if process.env.JWT_SECRETKEY is undefined
-  console.log("jwtSecretKey", jwtSecretKey);
-
   const token = Jwt.sign({ email, password }, jwtSecretKey);
-  console.log("token", token);
   return token;
 }
 

@@ -47,7 +47,6 @@ function createUser(_a) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 6, , 7]);
-                    console.log("create user");
                     return [4 /*yield*/, (0, userRepositories_1.findUserByEmail)(email)];
                 case 1:
                     existingUser = _c.sent();

@@ -10,7 +10,6 @@ import sendOTPByEmail from "../../shared/utilities/mailer";
 
 export async function createUser({ email, password }: userInterface) {
   try {
-    console.log("create user");
     const existingUser = await findUserByEmail(email);
     if (!existingUser && password) {
       const securedPassword = await securePassword(password);

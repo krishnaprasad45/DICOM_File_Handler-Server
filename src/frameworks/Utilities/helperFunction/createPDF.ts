@@ -1,29 +1,39 @@
 import formatDate from "./formatedDate";
 import removeCarat from "./removeCarat";
 
-const { PDFDocument, rgb } = require('pdf-lib');
+const { PDFDocument, rgb, TextAlignment } = require('pdf-lib');
 
 export async function createPDF(dataSet: { string: (arg0: string) => string; }) {
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 800]);
-    const { width, height } = page.getSize();
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage([600, 800]);
+  const { width, height } = page.getSize();
 
-    const fontSize = 12;
-    let yPosition = height - fontSize * 2;
+  const fontSize = 14
+  const marginX = 80; // Adjust margin from left side of the page
+  const marginY = height - fontSize * 3; // Adjust margin from top of the page
+  let yPosition = marginY;
 
-    function drawText(page: { drawText: (arg0: string, arg1: { x: number; y: number; size: number; color: any; }) => void; }, label: string, value: string) {
-        if (yPosition < fontSize * 2) {
-            yPosition = height - fontSize * 2;
-            page = pdfDoc.addPage([600, 800]);
-        }
-        page.drawText(`${label}: ${value}`, {
-            x: 50,
-            y: yPosition,
-            size: fontSize,
-            color: rgb(0, 0, 0),
-        });
-        yPosition -= fontSize * 1.5;
+ 
+function drawText(
+    page: { drawText: (arg0: string, arg1: { x: number; y: number; size: number; color: any; alignment?: typeof TextAlignment; }) => void; },
+    label: string,
+    value: string,
+    alignment: typeof TextAlignment = 'center' // Default left alignment
+  ) {
+    if (yPosition < fontSize * 2) {
+      yPosition = marginY;
+      page = pdfDoc.addPage([600, 800]);
     }
+
+    page.drawText(`${label}: ${value}`, {
+      x: marginX,
+      y: yPosition,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+      alignment,
+    });
+    yPosition -= fontSize * 1.5;
+  }
 
     const patientName = dataSet.string("x00100010") || "--";
     const formattedPatientName = patientName !== "--" ? removeCarat(patientName) : "--";
@@ -51,6 +61,8 @@ export async function createPDF(dataSet: { string: (arg0: string) => string; }) 
     const acquisitionTechnique = dataSet.string("x00180038") || "--";
     const imgProcedure = dataSet.string("x00321060") || "--";
 
+    drawText(page, 'MEDICAL REPORT', '', 'center');
+    yPosition -= fontSize;
     drawText(page, 'Patient Name', formattedPatientName);
     drawText(page, 'Patient ID', patientID);
     drawText(page, 'Patient DOB', formattedPatientDOB);

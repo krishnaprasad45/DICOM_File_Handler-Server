@@ -59,7 +59,6 @@ var uploadFile = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, (0, userRepositories_1.getUserIdByEmail)(userEmail)];
             case 1:
                 userId = _a.sent();
-                console.log("userId", userId);
                 if (!currentFile) return [3 /*break*/, 4];
                 dicomBuffer = currentFile.buffer;
                 dataSet = dicom_parser_1.default.parseDicom(dicomBuffer);
@@ -119,7 +118,6 @@ var uploadFile = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, (0, createPDF_1.createPDF)(dataSet)];
             case 3:
                 pdfBytes = _a.sent();
-                console.log("PDF>>", pdfBytes);
                 res.setHeader('Content-Type', 'application/pdf');
                 res.setHeader('Content-Disposition', 'attachment; filename="report.pdf"');
                 res.send(Buffer.from(pdfBytes));

@@ -3,28 +3,22 @@ import userModel from "../models/userModel";
 
 export async function findUserByEmail(email: string | undefined) {
   try {
-    console.log("findUserByEmail");
-    console.log("email..", email);
     const userData = await userModel.findOne({ email });
-    console.log("userData..", userData);
     return userData;
   } catch (error) {
     console.error("Error finding user by email:", error);
     throw error;
   }
 }
-export async function getUserIdByEmail(email:string | undefined) {
+export async function getUserIdByEmail(email: string | undefined) {
   try {
-    console.log("getUserIdByEmail");
-    console.log("email..", email);
-    
+
     if (!email) {
       throw new Error("Email is undefined");
     }
 
     const user = await userModel.findOne({ email });
-    console.log("user..", user);
-    
+
     if (user) {
       return user._id;
     } else {
@@ -40,7 +34,6 @@ export async function saveUser(data: userInterface) {
   try {
     const user = new userModel({ ...data });
     const result = await user.save();
-    console.log("user saved 4");
     return result;
   } catch (error) {
     console.log(error);
@@ -60,7 +53,7 @@ export async function storeOtp(generatedOtp: string, email: string) {
           },
         }
       );
-      
+
       // Schedule deletion after 5 minutes
       setTimeout(async () => {
         await userModel.updateOne(
@@ -72,9 +65,7 @@ export async function storeOtp(generatedOtp: string, email: string) {
             },
           }
         );
-        console.log("otp and createdAt fields deleted after 5 minutes.");
       }, 5 * 60 * 1000); // 5 minutes in milliseconds
-      console.log("otp stored..");
     } else {
       console.log("User not found.");
     }

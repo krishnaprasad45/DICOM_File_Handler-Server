@@ -68,7 +68,7 @@ var sendOTPByEmail = function (email, otp) { return __awaiter(void 0, void 0, vo
             case 1:
                 send = _a.sent();
                 if (send)
-                    console.log("Otp send successfully");
+                    console.log("Otp send successfully", otp);
                 else
                     console.log("Error in sending otp");
                 return [3 /*break*/, 3];

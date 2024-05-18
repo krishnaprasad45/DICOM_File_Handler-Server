@@ -35,42 +35,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sentEmailWithOtp = void 0;
+exports.getRecords = void 0;
+var documentRepository_1 = require("../../../adapters/data-access/repositories/documentRepository");
 var userRepositories_1 = require("../../../adapters/data-access/repositories/userRepositories");
-var generateOtp_1 = __importDefault(require("../../shared/utilities/generateOtp"));
-var mailer_1 = __importDefault(require("../../shared/utilities/mailer"));
-function sentEmailWithOtp(email) {
+function getRecords(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var existingUser, generatedOtp, error_1;
+        var email, userId, records, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 6, , 7]);
-                    return [4 /*yield*/, (0, userRepositories_1.findUserByEmail)(email)];
+                    _a.trys.push([0, 5, , 6]);
+                    email = req.query.email;
+                    return [4 /*yield*/, (0, userRepositories_1.getUserIdByEmail)(email)];
                 case 1:
-                    existingUser = _a.sent();
-                    if (!existingUser) return [3 /*break*/, 4];
-                    generatedOtp = (0, generateOtp_1.default)();
-                    return [4 /*yield*/, (0, userRepositories_1.storeOtp)(generatedOtp, email)];
+                    userId = _a.sent();
+                    if (!userId) return [3 /*break*/, 3];
+                    return [4 /*yield*/, (0, documentRepository_1.getRecordsFromDB)(userId)];
                 case 2:
-                    _a.sent();
-                    return [4 /*yield*/, (0, mailer_1.default)(email, generatedOtp)];
-                case 3:
-                    _a.sent();
-                    return [3 /*break*/, 5];
-                case 4: throw new Error("Email does not exist in the database");
-                case 5: return [3 /*break*/, 7];
-                case 6:
+                    records = _a.sent();
+                    if (records)
+                        res.status(200).json(records);
+                    return [3 /*break*/, 4];
+                case 3: throw new Error("User not found in the database");
+                case 4: return [3 /*break*/, 6];
+                case 5:
                     error_1 = _a.sent();
-                    console.error("Error sending email with OTP:", error_1);
+                    console.error("Error fetching records:", error_1);
                     throw error_1;
-                case 7: return [2 /*return*/];
+                case 6: return [2 /*return*/];
             }
         });
     });
 }
-exports.sentEmailWithOtp = sentEmailWithOtp;
+exports.getRecords = getRecords;

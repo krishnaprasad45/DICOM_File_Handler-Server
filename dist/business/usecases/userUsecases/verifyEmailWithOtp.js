@@ -45,7 +45,6 @@ function verifyEmailWithOtp(req, res) {
             switch (_b.label) {
                 case 0:
                     _b.trys.push([0, 8, , 9]);
-                    console.log("verifyEmailWithOtp");
                     _a = req.body, email = _a.email, enteredOtp = _a.enteredOtp;
                     return [4 /*yield*/, (0, userRepositories_1.getOtp)(email)];
                 case 1:

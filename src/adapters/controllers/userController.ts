@@ -12,7 +12,6 @@ export const userSignup = async (req: Request, res: Response) => {
       password,
     } as UserInterface);
     const verification = await sentEmailWithOtp(email);
-    console.log(7, verification);
     res.status(201).json(userData);
   } catch (error) {
     console.error(error);

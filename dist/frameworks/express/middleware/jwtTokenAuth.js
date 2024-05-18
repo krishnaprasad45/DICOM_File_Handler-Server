@@ -67,12 +67,9 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var dotenv = __importStar(require("dotenv"));
 dotenv.config();
 function generateAuthToken(existingUser) {
-    console.log("generateAuthToken");
     var email = existingUser.email, password = existingUser.password;
     var jwtSecretKey = process.env.JWT_SECRETKEY || ''; // Provide a default value if process.env.JWT_SECRETKEY is undefined
-    console.log("jwtSecretKey", jwtSecretKey);
     var token = jsonwebtoken_1.default.sign({ email: email, password: password }, jwtSecretKey);
-    console.log("token", token);
     return token;
 }
 exports.generateAuthToken = generateAuthToken;

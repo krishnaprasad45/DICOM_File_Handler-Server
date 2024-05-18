@@ -59,12 +59,9 @@ function findUserByEmail(email) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    console.log("findUserByEmail");
-                    console.log("email..", email);
                     return [4 /*yield*/, userModel_1.default.findOne({ email: email })];
                 case 1:
                     userData = _a.sent();
-                    console.log("userData..", userData);
                     return [2 /*return*/, userData];
                 case 2:
                     error_1 = _a.sent();
@@ -83,15 +80,12 @@ function getUserIdByEmail(email) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    console.log("getUserIdByEmail");
-                    console.log("email..", email);
                     if (!email) {
                         throw new Error("Email is undefined");
                     }
                     return [4 /*yield*/, userModel_1.default.findOne({ email: email })];
                 case 1:
                     user = _a.sent();
-                    console.log("user..", user);
                     if (user) {
                         return [2 /*return*/, user._id];
                     }
@@ -120,7 +114,6 @@ function saveUser(data) {
                     return [4 /*yield*/, user.save()];
                 case 1:
                     result = _a.sent();
-                    console.log("user saved 4");
                     return [2 /*return*/, result];
                 case 2:
                     error_3 = _a.sent();
@@ -164,12 +157,10 @@ function storeOtp(generatedOtp, email) {
                                     })];
                                 case 1:
                                     _a.sent();
-                                    console.log("otp and createdAt fields deleted after 5 minutes.");
                                     return [2 /*return*/];
                             }
                         });
                     }); }, 5 * 60 * 1000); // 5 minutes in milliseconds
-                    console.log("otp stored..");
                     return [3 /*break*/, 4];
                 case 3:
                     console.log("User not found.");

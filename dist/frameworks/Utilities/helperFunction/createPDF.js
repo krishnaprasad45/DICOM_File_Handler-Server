@@ -42,23 +42,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPDF = void 0;
 var formatedDate_1 = __importDefault(require("./formatedDate"));
 var removeCarat_1 = __importDefault(require("./removeCarat"));
-var _a = require('pdf-lib'), PDFDocument = _a.PDFDocument, rgb = _a.rgb;
+var _a = require('pdf-lib'), PDFDocument = _a.PDFDocument, rgb = _a.rgb, TextAlignment = _a.TextAlignment;
 function createPDF(dataSet) {
     return __awaiter(this, void 0, void 0, function () {
-        function drawText(page, label, value) {
+        function drawText(page, label, value, alignment // Default left alignment
+        ) {
+            if (alignment === void 0) { alignment = 'center'; }
             if (yPosition < fontSize * 2) {
-                yPosition = height - fontSize * 2;
+                yPosition = marginY;
                 page = pdfDoc.addPage([600, 800]);
             }
             page.drawText("".concat(label, ": ").concat(value), {
-                x: 50,
+                x: marginX,
                 y: yPosition,
                 size: fontSize,
                 color: rgb(0, 0, 0),
+                alignment: alignment,
             });
             yPosition -= fontSize * 1.5;
         }
-        var pdfDoc, page, _a, width, height, fontSize, yPosition, patientName, formattedPatientName, patientID, patientDOB, formattedPatientDOB, patientGender, studyID, studyDescription, studyDate, formattedStudyDate, modality, pixelSpacing, imageType, docimType, instanceUID, accessionNumber, doctorName, physician, studyReason, studyInstitution, reviewedInstitution, institutionLocation, bodyPart, acquisitionTechnique, imgProcedure, pdfBytes;
+        var pdfDoc, page, _a, width, height, fontSize, marginX, marginY, yPosition, patientName, formattedPatientName, patientID, patientDOB, formattedPatientDOB, patientGender, studyID, studyDescription, studyDate, formattedStudyDate, modality, pixelSpacing, imageType, docimType, instanceUID, accessionNumber, doctorName, physician, studyReason, studyInstitution, reviewedInstitution, institutionLocation, bodyPart, acquisitionTechnique, imgProcedure, pdfBytes;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, PDFDocument.create()];
@@ -66,8 +69,10 @@ function createPDF(dataSet) {
                     pdfDoc = _b.sent();
                     page = pdfDoc.addPage([600, 800]);
                     _a = page.getSize(), width = _a.width, height = _a.height;
-                    fontSize = 12;
-                    yPosition = height - fontSize * 2;
+                    fontSize = 14;
+                    marginX = 80;
+                    marginY = height - fontSize * 3;
+                    yPosition = marginY;
                     patientName = dataSet.string("x00100010") || "--";
                     formattedPatientName = patientName !== "--" ? (0, removeCarat_1.default)(patientName) : "--";
                     patientID = dataSet.string("x00100020") || "--";
@@ -93,6 +98,8 @@ function createPDF(dataSet) {
                     bodyPart = dataSet.string("x00180015") || "--";
                     acquisitionTechnique = dataSet.string("x00180038") || "--";
                     imgProcedure = dataSet.string("x00321060") || "--";
+                    drawText(page, 'MEDICAL REPORT', '', 'center');
+                    yPosition -= fontSize;
                     drawText(page, 'Patient Name', formattedPatientName);
                     drawText(page, 'Patient ID', patientID);
                     drawText(page, 'Patient DOB', formattedPatientDOB);
