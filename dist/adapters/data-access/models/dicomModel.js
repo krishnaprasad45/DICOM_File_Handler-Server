@@ -5,6 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var medicalDocumentSchema = new mongoose_1.default.Schema({
+    userId: {
+        type: String
+    },
     patientName: {
         type: String,
         default: "--",
@@ -97,6 +100,10 @@ var medicalDocumentSchema = new mongoose_1.default.Schema({
         type: String,
         default: "--",
     },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
 });
 var MedicalDocument = mongoose_1.default.model("MedicalDocument", medicalDocumentSchema);
 exports.default = MedicalDocument;

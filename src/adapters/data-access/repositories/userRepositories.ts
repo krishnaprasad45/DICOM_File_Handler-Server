@@ -13,6 +13,28 @@ export async function findUserByEmail(email: string | undefined) {
     throw error;
   }
 }
+export async function getUserIdByEmail(email:string | undefined) {
+  try {
+    console.log("getUserIdByEmail");
+    console.log("email..", email);
+    
+    if (!email) {
+      throw new Error("Email is undefined");
+    }
+
+    const user = await userModel.findOne({ email });
+    console.log("user..", user);
+    
+    if (user) {
+      return user._id;
+    } else {
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    console.error("Error getting user ID by email:", error);
+    throw error;
+  }
+}
 
 export async function saveUser(data: userInterface) {
   try {

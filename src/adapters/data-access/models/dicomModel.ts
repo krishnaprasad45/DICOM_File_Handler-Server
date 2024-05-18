@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 
 const medicalDocumentSchema = new mongoose.Schema({
+  userId:{
+    type : String
+  },
   patientName: {
     type: String,
     default: "--",
@@ -93,6 +96,10 @@ const medicalDocumentSchema = new mongoose.Schema({
     type: String,
     default: "--",
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 const MedicalDocument = mongoose.model("MedicalDocument", medicalDocumentSchema);

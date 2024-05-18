@@ -50,7 +50,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOtp = exports.storeOtp = exports.saveUser = exports.findUserByEmail = void 0;
+exports.getOtp = exports.storeOtp = exports.saveUser = exports.getUserIdByEmail = exports.findUserByEmail = void 0;
 var userModel_1 = __importDefault(require("../models/userModel"));
 function findUserByEmail(email) {
     return __awaiter(this, void 0, void 0, function () {
@@ -76,9 +76,42 @@ function findUserByEmail(email) {
     });
 }
 exports.findUserByEmail = findUserByEmail;
+function getUserIdByEmail(email) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    console.log("getUserIdByEmail");
+                    console.log("email..", email);
+                    if (!email) {
+                        throw new Error("Email is undefined");
+                    }
+                    return [4 /*yield*/, userModel_1.default.findOne({ email: email })];
+                case 1:
+                    user = _a.sent();
+                    console.log("user..", user);
+                    if (user) {
+                        return [2 /*return*/, user._id];
+                    }
+                    else {
+                        throw new Error("User not found");
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_2 = _a.sent();
+                    console.error("Error getting user ID by email:", error_2);
+                    throw error_2;
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getUserIdByEmail = getUserIdByEmail;
 function saveUser(data) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, result, error_2;
+        var user, result, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -90,8 +123,8 @@ function saveUser(data) {
                     console.log("user saved 4");
                     return [2 /*return*/, result];
                 case 2:
-                    error_2 = _a.sent();
-                    console.log(error_2);
+                    error_3 = _a.sent();
+                    console.log(error_3);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -101,7 +134,7 @@ function saveUser(data) {
 exports.saveUser = saveUser;
 function storeOtp(generatedOtp, email) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, error_3;
+        var user, error_4;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -143,8 +176,8 @@ function storeOtp(generatedOtp, email) {
                     _a.label = 4;
                 case 4: return [3 /*break*/, 6];
                 case 5:
-                    error_3 = _a.sent();
-                    console.log(error_3);
+                    error_4 = _a.sent();
+                    console.log(error_4);
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }
@@ -154,7 +187,7 @@ function storeOtp(generatedOtp, email) {
 exports.storeOtp = storeOtp;
 function getOtp(email) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, otp1, error_4;
+        var user, otp1, error_5;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -175,9 +208,9 @@ function getOtp(email) {
                     return [2 /*return*/, null];
                 case 4: return [3 /*break*/, 6];
                 case 5:
-                    error_4 = _a.sent();
-                    console.error("Error retrieving OTP from DB:", error_4);
-                    throw error_4;
+                    error_5 = _a.sent();
+                    console.error("Error retrieving OTP from DB:", error_5);
+                    throw error_5;
                 case 6: return [2 /*return*/];
             }
         });

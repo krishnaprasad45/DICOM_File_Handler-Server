@@ -1,4 +1,5 @@
  export default interface MedicalDocument {
+    userId : string | null ;
     patientName: string;
     patientID: string;
     patientDOB: string;
@@ -22,6 +23,7 @@
     bodyPart: string;
     acquisitionTechnique: string;
     imgProcedure: string;
+    createdAt?: Date;
   }
   
   
