@@ -31,4 +31,4 @@ The DICOM metadata stored in the database can then be accessed and retrieved whe
 
 ---
 
-[![Thumbnail](https://drive.google.com/file/d/1ATUjrt2762PaMdyxfLyz6zc1XfcNVztJ/view)
+[![Thumbnail](https://drive.google.com/file/d/1ATUjrt2762PaMdyxfLyz6zc1XfcNVztJ/view?usp=sharing)
