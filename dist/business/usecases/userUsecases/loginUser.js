@@ -57,10 +57,16 @@ function loginUser(email, password) {
                         return [2 /*return*/, { userData: existingUser, token: token }];
                     }
                     else {
-                        throw new Error("Password Not Match");
+                        throw {
+                            message: "Password does not match",
+                            statusCode: 409,
+                        };
                     }
                     return [3 /*break*/, 4];
-                case 3: throw new Error("User not found");
+                case 3: throw {
+                    message: "Email not exist",
+                    statusCode: 408,
+                };
                 case 4: return [2 /*return*/];
             }
         });

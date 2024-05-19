@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyEmailWithOtp = void 0;
 var userRepositories_1 = require("../../../adapters/data-access/repositories/userRepositories");
-function verifyEmailWithOtp(req, res) {
+function verifyEmailWithOtp(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
         var _a, email, enteredOtp, retrievedOtp, user, error_1;
         return __generator(this, function (_b) {
@@ -71,7 +71,7 @@ function verifyEmailWithOtp(req, res) {
                 case 8:
                     error_1 = _b.sent();
                     console.error("Error verifying email with OTP:", error_1);
-                    res.status(500).json({ message: "Internal server error." });
+                    next(error_1);
                     return [3 /*break*/, 9];
                 case 9: return [2 /*return*/];
             }

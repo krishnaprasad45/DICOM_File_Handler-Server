@@ -46,11 +46,16 @@ function createUser(_a) {
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _c.trys.push([0, 6, , 7]);
+                    _c.trys.push([0, 4, , 5]);
                     return [4 /*yield*/, (0, userRepositories_1.findUserByEmail)(email)];
                 case 1:
                     existingUser = _c.sent();
-                    if (!(!existingUser && password)) return [3 /*break*/, 4];
+                    if (existingUser) {
+                        throw {
+                            message: "Email already exists",
+                            statusCode: 409,
+                        };
+                    }
                     return [4 /*yield*/, (0, bcrypt_1.securePassword)(password)];
                 case 2:
                     securedPassword = _c.sent();
@@ -59,13 +64,11 @@ function createUser(_a) {
                             password: securedPassword,
                         })];
                 case 3: return [2 /*return*/, _c.sent()];
-                case 4: throw new Error("Email already exists in the database");
-                case 5: return [3 /*break*/, 7];
-                case 6:
+                case 4:
                     error_1 = _c.sent();
                     console.error("Error creating user:", error_1);
                     throw error_1;
-                case 7: return [2 /*return*/];
+                case 5: return [2 /*return*/];
             }
         });
     });

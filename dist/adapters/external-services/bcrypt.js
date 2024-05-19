@@ -43,13 +43,20 @@ exports.matchPassword = exports.securePassword = void 0;
 var bcrypt_1 = __importDefault(require("bcrypt"));
 function securePassword(password) {
     return __awaiter(this, void 0, void 0, function () {
+        var error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    _a.trys.push([0, 3, , 4]);
                     if (!password) return [3 /*break*/, 2];
                     return [4 /*yield*/, bcrypt_1.default.hash(password, 10)];
                 case 1: return [2 /*return*/, _a.sent()];
-                case 2: return [2 /*return*/];
+                case 2: return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    console.error("Error securing password:", error_1);
+                    throw error_1;
+                case 4: return [2 /*return*/];
             }
         });
     });
@@ -57,10 +64,18 @@ function securePassword(password) {
 exports.securePassword = securePassword;
 function matchPassword(passwordOne, passwordTwo) {
     return __awaiter(this, void 0, void 0, function () {
+        var error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, bcrypt_1.default.compare(passwordOne, passwordTwo)];
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, bcrypt_1.default.compare(passwordOne, passwordTwo)];
                 case 1: return [2 /*return*/, _a.sent()];
+                case 2:
+                    error_2 = _a.sent();
+                    console.error("Error matching passwords:", error_2);
+                    throw error_2;
+                case 3: return [2 /*return*/];
             }
         });
     });

@@ -9,6 +9,8 @@ var dotenv_1 = __importDefault(require("dotenv"));
 var mongo_1 = __importDefault(require("../frameworks/database/mongo"));
 var userRoutes_1 = __importDefault(require("../frameworks/express/routes/userRoutes"));
 var loggingMiddleware_1 = __importDefault(require("../frameworks/express/middleware/loggingMiddleware"));
+var errorHandler_1 = require("../frameworks/express/middleware/errorHandler");
+var jwtTokenAuth_1 = require("../frameworks/express/middleware/jwtTokenAuth");
 // Load environment variables early
 dotenv_1.default.config();
 var app = (0, express_1.default)();
@@ -32,8 +34,10 @@ app.use((0, cors_1.default)({
 }));
 // Connect to Database
 (0, mongo_1.default)();
+app.use(jwtTokenAuth_1.validateRequest);
 // Routes
 app.use("/", userRoutes_1.default);
+app.use(errorHandler_1.errorHandler);
 // Start the server
 app.listen(PORT, function () {
     console.log("Server is running on port ".concat(PORT));

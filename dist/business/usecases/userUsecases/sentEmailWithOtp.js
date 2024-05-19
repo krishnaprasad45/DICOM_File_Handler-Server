@@ -62,7 +62,10 @@ function sentEmailWithOtp(email) {
                 case 3:
                     _a.sent();
                     return [3 /*break*/, 5];
-                case 4: throw new Error("Email does not exist in the database");
+                case 4: throw {
+                    message: "Email already exists",
+                    statusCode: 409,
+                };
                 case 5: return [3 /*break*/, 7];
                 case 6:
                     error_1 = _a.sent();

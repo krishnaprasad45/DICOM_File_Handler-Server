@@ -40,46 +40,42 @@ exports.userLogin = exports.userSignup = void 0;
 var createUser_1 = require("../../business/usecases/userUsecases/createUser");
 var sentEmailWithOtp_1 = require("../../business/usecases/userUsecases/sentEmailWithOtp");
 var loginUser_1 = require("../../business/usecases/userUsecases/loginUser");
-var userSignup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, userData, verification, error_1;
+var userSignup = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, result, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 3, , 4]);
                 _a = req.body, email = _a.email, password = _a.password;
-                return [4 /*yield*/, (0, createUser_1.createUser)({
-                        email: email,
-                        password: password,
-                    })];
+                if (!email || !password) {
+                    res.status(400).json({ message: 'Email and password are required.' });
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, (0, createUser_1.createUser)({ email: email, password: password })];
             case 1:
-                userData = _b.sent();
+                result = _b.sent();
                 return [4 /*yield*/, (0, sentEmailWithOtp_1.sentEmailWithOtp)(email)];
             case 2:
-                verification = _b.sent();
-                res.status(201).json(userData);
+                _b.sent();
+                res.status(201).json(result);
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _b.sent();
-                console.error(error_1);
-                res.json({ message: error_1 });
+                console.error('Signup error:', error_1);
+                next(error_1);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.userSignup = userSignup;
-var userLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var userLogin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, email, password, response, userData, token, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
                 _a = req.body, email = _a.email, password = _a.password;
-                if (!email || !password) {
-                    return [2 /*return*/, res
-                            .status(400)
-                            .json({ message: "Email and password are required." })];
-                }
                 return [4 /*yield*/, (0, loginUser_1.loginUser)(email, password)];
             case 1:
                 response = _b.sent();
@@ -88,7 +84,7 @@ var userLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [3 /*break*/, 3];
             case 2:
                 error_2 = _b.sent();
-                res.json(error_2);
+                next(error_2);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

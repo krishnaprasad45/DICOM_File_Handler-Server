@@ -42,29 +42,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRecordsFromDB = exports.saveMedicalDocument = void 0;
 var dicomModel_1 = __importDefault(require("../models/dicomModel"));
 var saveMedicalDocument = function (documentData) { return __awaiter(void 0, void 0, void 0, function () {
-    var newMedicalDocument;
+    var newMedicalDocument, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 2, , 3]);
                 newMedicalDocument = new dicomModel_1.default(documentData);
                 return [4 /*yield*/, newMedicalDocument.save()];
             case 1:
                 _a.sent();
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.error("Error saving medical document:", error_1);
+                throw error_1;
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.saveMedicalDocument = saveMedicalDocument;
 var getRecordsFromDB = function (userId) { return __awaiter(void 0, void 0, void 0, function () {
-    var userIdStr, records;
+    var userIdStr, records, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 2, , 3]);
                 userIdStr = userId.toString();
                 return [4 /*yield*/, dicomModel_1.default.find({ userId: userIdStr })];
             case 1:
                 records = _a.sent();
                 return [2 /*return*/, records ? records : null];
+            case 2:
+                error_2 = _a.sent();
+                console.error("Error fetching records from database:", error_2);
+                throw error_2;
+            case 3: return [2 /*return*/];
         }
     });
 }); };

@@ -6,12 +6,11 @@ import { Types } from 'mongoose';
 
 export async function getRecords(req: Request, res: Response) {
     try {
-        const email = req.query.email;
-
+        const email: string = req.query.email as string;
         const userId: Types.ObjectId | null = await getUserIdByEmail(email);
         if (userId) {
             const records = await getRecordsFromDB(userId);
-            if (records) res.status(200).json(records)
+            if (records) res.status(200).json(records);
         } else {
             throw new Error("User not found in the database");
         }

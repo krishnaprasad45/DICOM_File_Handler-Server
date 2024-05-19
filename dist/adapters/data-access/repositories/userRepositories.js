@@ -117,8 +117,8 @@ function saveUser(data) {
                     return [2 /*return*/, result];
                 case 2:
                     error_3 = _a.sent();
-                    console.log(error_3);
-                    return [3 /*break*/, 3];
+                    console.error("Error saving user:", error_3);
+                    throw error_3;
                 case 3: return [2 /*return*/];
             }
         });
@@ -127,7 +127,7 @@ function saveUser(data) {
 exports.saveUser = saveUser;
 function storeOtp(generatedOtp, email) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, error_4;
+        var user, error, error_4;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -163,13 +163,13 @@ function storeOtp(generatedOtp, email) {
                     }); }, 5 * 60 * 1000); // 5 minutes in milliseconds
                     return [3 /*break*/, 4];
                 case 3:
-                    console.log("User not found.");
-                    _a.label = 4;
+                    error = new Error("User not found.");
+                    throw error;
                 case 4: return [3 /*break*/, 6];
                 case 5:
                     error_4 = _a.sent();
-                    console.log(error_4);
-                    return [3 /*break*/, 6];
+                    console.error("Error storing OTP:", error_4);
+                    throw error_4;
                 case 6: return [2 /*return*/];
             }
         });

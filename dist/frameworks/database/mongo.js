@@ -59,8 +59,7 @@ var connectDB = function () { return __awaiter(void 0, void 0, void 0, function 
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _a.sent();
-                console.error('Error connecting to MongoDB:', error_1);
-                return [3 /*break*/, 4];
+                throw error_1;
             case 4: return [2 /*return*/];
         }
     });

@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import connectDB from '../frameworks/database/mongo';
 import userRoute from '../frameworks/express/routes/userRoutes';
 import loggingMiddleware from '../frameworks/express/middleware/loggingMiddleware';
+import { errorHandler } from '../frameworks/express/middleware/errorHandler';
+import { validateRequest } from '../frameworks/express/middleware/jwtTokenAuth';
 
 // Load environment variables early
 dotenv.config();
@@ -34,8 +36,10 @@ app.use(
 // Connect to Database
 connectDB();
 
+app.use(validateRequest);
 // Routes
 app.use("/", userRoute);
+app.use(errorHandler);
 
 // Start the server
 app.listen(PORT, () => {

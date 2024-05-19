@@ -36,7 +36,8 @@ export async function saveUser(data: userInterface) {
     const result = await user.save();
     return result;
   } catch (error) {
-    console.log(error);
+    console.error("Error saving user:", error);
+    throw error;
   }
 }
 
@@ -67,10 +68,12 @@ export async function storeOtp(generatedOtp: string, email: string) {
         );
       }, 5 * 60 * 1000); // 5 minutes in milliseconds
     } else {
-      console.log("User not found.");
+      const error = new Error("User not found.");
+      throw error;
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error storing OTP:", error);
+    throw error;
   }
 }
 
